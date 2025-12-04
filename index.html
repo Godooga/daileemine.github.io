@@ -1,398 +1,956 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daileemine | Minecraft Сервер</title>
-    <meta name="description" content="Офіційний сайт Minecraft сервера Daileemine. Приєднуйся до нашої спільноти!">
+    <title>Minecraft Сервер | Белый лист</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --mc-green: #00FF00;
-            --mc-dark-green: #00AA00;
-            --mc-dark: #1a1a2e;
-            --mc-blue: #00ADB5;
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #3a873a;
+            --primary-dark: #2d6b2d;
+            --secondary: #4a90e2;
+            --dark: #2c2c2c;
+            --light: #f5f5f5;
+            --accent: #e6b422;
+            --danger: #e74c3c;
+            --success: #27ae60;
+            --minecraft-green: #55aa55;
+            --minecraft-dark: #3c3c3c;
+            --minecraft-gray: #8b8b8b;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--mc-dark);
-            color: white;
-            line-height: 1.6;
+            background-color: #1a1a1a;
+            color: var(--light);
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="%23222"/><path d="M0,0 L100,0 L100,100 Z" fill="%23333"/><path d="M0,0 L0,100 L100,100 Z" fill="%23222"/></svg>');
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(0, 173, 181, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(0, 255, 0, 0.05) 0%, transparent 50%);
         }
         
-        .header {
-            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
-            padding: 3rem 0;
+        /* Экран входа */
+        #login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a472a 0%, #2d2d2d 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+        
+        .login-container {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 15px;
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--primary);
             text-align: center;
-            border-bottom: 5px solid var(--mc-green);
-            position: relative;
-            overflow: hidden;
         }
         
-        .header::after {
-            content: '⚔️';
-            position: absolute;
-            font-size: 200px;
-            opacity: 0.05;
-            right: 5%;
-            top: 50%;
-            transform: translateY(-50%);
+        .login-container h1 {
+            color: var(--minecraft-green);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .login-container p {
+            margin-bottom: 30px;
+            color: #aaa;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .login-form button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .login-form button:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* Главный экран */
+        #main-screen {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        /* Шапка сайта */
+        header {
+            background-color: var(--dark);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
         .logo {
-            font-size: 4rem;
-            background: linear-gradient(45deg, var(--mc-green), var(--mc-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        .server-ip-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 3rem;
-            margin: 4rem auto;
-            max-width: 900px;
-            border: 2px solid rgba(0, 255, 0, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .server-ip-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--mc-green), var(--mc-blue));
-        }
-        
-        .ip-display {
-            font-family: 'Courier New', monospace;
-            font-size: 3rem;
-            color: var(--mc-green);
-            background: rgba(0, 0, 0, 0.5);
-            padding: 1.5rem 2rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-            display: inline-block;
-            border: 2px solid var(--mc-blue);
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.2); }
-            50% { box-shadow: 0 0 50px rgba(0, 255, 0, 0.4); }
-            100% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.2); }
-        }
-        
-        .copy-btn {
-            background: linear-gradient(135deg, var(--mc-green), var(--mc-dark-green));
-            color: white;
-            border: none;
-            padding: 1rem 2.5rem;
-            font-size: 1.2rem;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 1rem;
-            font-weight: bold;
-        }
-        
-        .copy-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 255, 0, 0.3);
-        }
-        
-        .copy-btn:active {
-            transform: translateY(-1px);
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin: 4rem 0;
-        }
-        
-        .feature {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2rem;
-            border-radius: 15px;
-            border-left: 5px solid var(--mc-blue);
-            transition: transform 0.3s;
-        }
-        
-        .feature:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.08);
-        }
-        
-        .feature h3 {
-            color: var(--mc-blue);
-            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--minecraft-green);
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--minecraft-green);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border: 2px solid var(--primary);
+        }
+        
+        /* Основное содержимое */
+        main {
+            padding: 40px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .page-title {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: var(--minecraft-green);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .page-title i {
+            font-size: 2rem;
+        }
+        
+        /* Форма подачи анкеты */
+        .application-form {
+            background-color: rgba(40, 40, 40, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 2px solid var(--primary);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .form-group {
+            flex: 1;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ddd;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        /* Новости */
+        .news-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .news-card {
+            background-color: rgba(40, 40, 40, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid #444;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        
+        .news-image {
+            height: 200px;
+            background-color: #555;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .news-content {
+            padding: 20px;
+        }
+        
+        .news-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .news-date {
+            color: var(--minecraft-gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .news-excerpt {
+            color: #bbb;
+            line-height: 1.6;
+        }
+        
+        /* Главная страница */
+        .welcome-section {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: rgba(40, 40, 40, 0.8);
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 2px solid var(--primary);
+        }
+        
+        .welcome-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--minecraft-green);
+        }
+        
+        .welcome-section p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: #ddd;
+            line-height: 1.6;
         }
         
         .stats {
             display: flex;
             justify-content: center;
-            gap: 3rem;
-            margin: 3rem 0;
             flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 40px;
         }
         
-        .stat {
-            text-align: center;
-            padding: 1.5rem;
-            min-width: 150px;
-        }
-        
-        .stat-value {
-            font-size: 3rem;
-            font-weight: bold;
-            color: var(--mc-green);
-            margin-bottom: 0.5rem;
-        }
-        
-        footer {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 3rem 0;
-            text-align: center;
-            margin-top: 4rem;
-            border-top: 1px solid rgba(0, 173, 181, 0.3);
-        }
-        
-        .discord-btn {
-            background: #5865F2;
-            color: white;
-            padding: 1rem 2rem;
+        .stat-card {
+            background-color: rgba(30, 30, 30, 0.9);
+            padding: 25px;
             border-radius: 10px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin: 1rem;
-            transition: all 0.3s;
+            min-width: 200px;
+            border-top: 4px solid var(--primary);
         }
         
-        .discord-btn:hover {
-            background: #4752C4;
-            transform: translateY(-3px);
+        .stat-card h3 {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 10px;
         }
         
+        .stat-card p {
+            color: #bbb;
+            font-size: 1.1rem;
+        }
+        
+        /* Подвал */
+        footer {
+            background-color: var(--dark);
+            padding: 30px 5%;
+            text-align: center;
+            border-top: 3px solid var(--primary);
+            margin-top: 50px;
+        }
+        
+        footer p {
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .social-icons a {
+            color: #aaa;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        
+        .social-icons a:hover {
+            color: var(--primary);
+        }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Адаптивность */
         @media (max-width: 768px) {
-            .logo { font-size: 2.5rem; }
-            .ip-display { font-size: 2rem; padding: 1rem; }
-            .server-ip-card { padding: 2rem 1.5rem; margin: 2rem 1rem; }
-            .stat-value { font-size: 2rem; }
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            nav ul {
+                gap: 10px;
+            }
+            
+            nav a {
+                padding: 6px 10px;
+                font-size: 0.9rem;
+            }
+            
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            .news-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stat-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 100;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .notification.success {
+            background-color: var(--success);
+        }
+        
+        .notification.error {
+            background-color: var(--danger);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .minecraft-text {
+            font-family: 'Minecraft', monospace;
+            letter-spacing: 1px;
+        }
+        
+        /* Загрузка */
+        .loader {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .loader:after {
+            content: " ";
+            display: block;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border-radius: 50%;
+            border: 6px solid var(--primary);
+            border-color: var(--primary) transparent var(--primary) transparent;
+            animation: loader 1.2s linear infinite;
+        }
+        
+        @keyframes loader {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <h1 class="logo">⚔️ Daileemine</h1>
-            <p style="font-size: 1.2rem; color: #8da1b9; max-width: 600px; margin: 0 auto;">
-                Український Minecraft сервер з дружньою спільнотою та унікальними модами
+    <!-- Экран входа -->
+    <div id="login-screen">
+        <div class="login-container">
+            <h1><i class="fas fa-cube"></i> Minecraft Сервер</h1>
+            <p>Войдите, чтобы получить доступ к сайту</p>
+            <form class="login-form" id="loginForm">
+                <input type="text" id="username" placeholder="Имя пользователя" required>
+                <input type="password" id="password" placeholder="Пароль" required>
+                <button type="submit">Войти</button>
+            </form>
+            <p style="margin-top: 20px; color: #888; font-size: 0.9rem;">
+                Для демонстрации используйте любой логин и пароль
             </p>
-            
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-value">24/7</div>
-                    <p>Онлайн сервер</p>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="online-count">42/100</div>
-                    <p>Гравців онлайн</p>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">1.16-1.20</div>
-                    <p>Версія Minecraft</p>
-                </div>
-            </div>
         </div>
-    </header>
-
-    <main class="container">
-        <div class="server-ip-card">
-            <h2 style="text-align: center; margin-bottom: 1.5rem; color: var(--mc-blue); font-size: 2rem;">
-                <i class="fas fa-server"></i> Підключитися до сервера
-            </h2>
-            
-            <div style="text-align: center;">
-                <p style="margin-bottom: 1rem; color: #8da1b9; font-size: 1.1rem;">
-                    Скопіюйте IP-адресу та вставте в клієнт Minecraft:
-                </p>
-                
-                <div class="ip-display" id="ip-address">
-                    daileemine.pp.ua
-                </div>
-                
-                <button class="copy-btn" onclick="copyIP()">
-                    <i class="far fa-copy"></i> Копіювати IP
-                </button>
+    </div>
+    
+    <!-- Главный экран -->
+    <div id="main-screen">
+        <!-- Шапка сайта -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+                <h1>Minecraft <span>Сервер</span></h1>
             </div>
             
-            <div style="margin-top: 3rem; background: rgba(0, 173, 181, 0.1); padding: 1.5rem; border-radius: 10px;">
-                <h3 style="color: var(--mc-blue); margin-bottom: 1rem;">
-                    <i class="fas fa-gamepad"></i> Як приєднатися?
-                </h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                    <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                        <div style="color: var(--mc-green); font-weight: bold;">1</div>
-                        <p>Запустіть Minecraft</p>
-                    </div>
-                    <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                        <div style="color: var(--mc-green); font-weight: bold;">2</div>
-                        <p>Мережева гра → Додати сервер</p>
-                    </div>
-                    <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                        <div style="color: var(--mc-green); font-weight: bold;">3</div>
-                        <p>Вставте IP: <strong>daileemine.pp.ua</strong></p>
-                    </div>
-                    <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                        <div style="color: var(--mc-green); font-weight: bold;">4</div>
-                        <p>Збережіть та грайте!</p>
-                    </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-section="home"><i class="fas fa-home"></i> Главная</a></li>
+                    <li><a href="#" class="nav-link" data-section="application"><i class="fas fa-file-alt"></i> Подать анкету</a></li>
+                    <li><a href="#" class="nav-link" data-section="news"><i class="fas fa-newspaper"></i> Новости</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-info">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div>
+                    <div id="current-username">Гость</div>
+                    <a href="#" id="logout-btn" style="color: #aaa; font-size: 0.9rem;">Выйти</a>
                 </div>
             </div>
-        </div>
-
-        <h2 style="text-align: center; color: var(--mc-blue); margin: 4rem 0 2rem; font-size: 2.5rem;">
-            <i class="fas fa-star"></i> Наші особливості
-        </h2>
+        </header>
         
-        <div class="features-grid">
-            <div class="feature">
-                <h3><i class="fas fa-cogs"></i> Моди та плагіни</h3>
-                <p>Унікальні моди для покращення геймплею, економіка, квести, система захисту територій</p>
-            </div>
+        <!-- Основное содержимое -->
+        <main>
+            <!-- Главная страница -->
+            <section id="home" class="section active">
+                <div class="welcome-section">
+                    <h2>Добро пожаловать на наш Minecraft сервер!</h2>
+                    <p>Присоединяйтесь к нашему дружному сообществу игроков. У нас вы найдете увлекательный геймплей, уникальные ивенты и активное комьюнити. Подайте анкету в белый лист, чтобы присоединиться к игре!</p>
+                    
+                    <div class="stats">
+                        <div class="stat-card">
+                            <h3>156</h3>
+                            <p>Активных игроков</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>24/7</h3>
+                            <p>Работа сервера</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>89</h3>
+                            <p>Успешных анкет</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>1.19.2</h3>
+                            <p>Версия игры</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="page-title"><i class="fas fa-bullhorn"></i> Последние новости</h2>
+                <div class="news-container" id="home-news">
+                    <!-- Новости будут загружены через JS -->
+                </div>
+            </section>
             
-            <div class="feature">
-                <h3><i class="fas fa-trophy"></i> Міні-ігри</h3>
-                <p>BedWars, SkyWars, Capture the Flag та інші захоплюючі міні-ігри</p>
-            </div>
+            <!-- Форма подачи анкеты -->
+            <section id="application" class="section">
+                <h2 class="page-title"><i class="fas fa-file-alt"></i> Подача анкеты в белый лист</h2>
+                <p style="margin-bottom: 30px; color: #bbb;">Заполните форму ниже, чтобы подать заявку на присоединение к серверу. После рассмотрения модераторами вы получите ответ в течение 24 часов.</p>
+                
+                <form class="application-form" id="applicationForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="mc-username">Minecraft Имя пользователя *</label>
+                            <input type="text" id="mc-username" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Возраст *</label>
+                            <input type="number" id="age" class="form-control" min="12" max="99" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="discord">Discord имя #тег *</label>
+                            <input type="text" id="discord" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="playtime">Сколько часов в неделю играете?</label>
+                            <select id="playtime" class="form-control">
+                                <option value="1-5">1-5 часов</option>
+                                <option value="5-10">5-10 часов</option>
+                                <option value="10-20">10-20 часов</option>
+                                <option value="20+">Более 20 часов</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="experience">Опыт игры в Minecraft *</label>
+                        <textarea id="experience" class="form-control" required placeholder="Расскажите о вашем опыте игры в Minecraft..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reason">Почему вы хотите присоединиться к нашему серверу? *</label>
+                        <textarea id="reason" class="form-control" required placeholder="Опишите причины, по которым вы хотите играть на нашем сервере..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rules">
+                            <input type="checkbox" id="rules" required>
+                            Я ознакомился с правилами сервера и обязуюсь их соблюдать *
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">Отправить анкету</button>
+                </form>
+            </section>
             
-            <div class="feature">
-                <h3><i class="fas fa-shield-alt"></i> Анти-чит</h3>
-                <p>Потужна система захисту від читів,公平 гра для всіх</p>
-            </div>
-            
-            <div class="feature">
-                <h3><i class="fas fa-users"></i> Спільнота</h3>
-                <p>Активна та дружня спільнота, регулярні івенти, конкурси з призами</p>
-            </div>
-        </div>
+            <!-- Страница новостей -->
+            <section id="news" class="section">
+                <h2 class="page-title"><i class="fas fa-newspaper"></i> Новости сервера</h2>
+                <div class="news-container" id="news-container">
+                    <!-- Новости будут загружены через JS -->
+                </div>
+            </section>
+        </main>
         
-        <div style="text-align: center; margin: 4rem 0;">
-            <a href="#" class="discord-btn">
-                <i class="fab fa-discord"></i> Наш Discord сервер
-            </a>
-            <a href="#" style="color: var(--mc-blue); text-decoration: none; margin: 1rem; display: inline-block;">
-                <i class="fab fa-telegram"></i> Telegram канал
-            </a>
-        </div>
-    </main>
-
-    <footer>
-        <div class="container">
-            <div style="margin-bottom: 2rem;">
-                <div class="logo" style="font-size: 2rem;">⚔️ Daileemine</div>
-                <p style="color: #8da1b9; margin-top: 1rem;">Український Minecraft сервер</p>
+        <!-- Подвал сайта -->
+        <footer>
+            <p>Minecraft Сервер &copy; 2023. Все права защищены.</p>
+            <p>Этот сайт не аффилирован с Mojang Studios или Microsoft.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-discord"></i></a>
+                <a href="#"><i class="fab fa-vk"></i></a>
+                <a href="#"><i class="fab fa-telegram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
             </div>
-            
-            <div style="color: #666; font-size: 0.9rem; margin-top: 2rem;">
-                <p>© <span id="current-year">2024</span> Daileemine Minecraft Server. Усі права захищені.</p>
-                <p style="margin-top: 0.5rem;">
-                    <i class="fas fa-globe"></i> daileemine.pp.ua | 
-                    <i class="fas fa-envelope"></i> admin@daileemine.pp.ua
-                </p>
-                <p style="margin-top: 0.5rem; color: #8da1b9; font-size: 0.8rem;">
-                    Хостинг: GitHub Pages | SSL: Let's Encrypt
-                </p>
-            </div>
-        </div>
-    </footer>
-
+        </footer>
+    </div>
+    
     <script>
-        // Копирование IP
-        function copyIP() {
-            const ip = document.getElementById('ip-address').textContent;
-            navigator.clipboard.writeText(ip).then(() => {
-                const btn = document.querySelector('.copy-btn');
-                const originalHTML = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-check"></i> Скопійовано!';
-                btn.style.background = 'linear-gradient(135deg, #00FF00, #00AA00)';
+        // Данные для входа (для демонстрации)
+        const demoLogin = {
+            username: "demo",
+            password: "demo"
+        };
+        
+        // Данные новостей
+        const newsData = [
+            {
+                id: 1,
+                title: "Обновление сервера до версии 1.19.2",
+                date: "15.10.2023",
+                excerpt: "Мы успешно обновили сервер до последней версии Minecraft. Теперь доступны новые биомы, мобы и предметы!",
+                image: "bg1"
+            },
+            {
+                id: 2,
+                title: "Новый ивент: Охота на дракона",
+                date: "10.10.2023",
+                excerpt: "Приглашаем всех игроков принять участие в массовой охоте на дракона Края в эту субботу. Призы победителям!",
+                image: "bg2"
+            },
+            {
+                id: 3,
+                title: "Открыт набор в команду модераторов",
+                date: "05.10.2023",
+                excerpt: "Мы ищем активных и ответственных игроков для помощи в администрировании сервера. Подать заявку можно в Discord.",
+                image: "bg3"
+            },
+            {
+                id: 4,
+                title: "Технические работы 20 октября",
+                date: "01.10.2023",
+                excerpt: "20 октября с 03:00 до 06:00 по МСК будут проводиться технические работы. Сервер будет недоступен.",
+                image: "bg4"
+            },
+            {
+                id: 5,
+                title: "Конкурс на лучшую постройку месяца",
+                date: "25.09.2023",
+                excerpt: "Объявляем конкурс на лучшую постройку октября. Победитель получит редкие ресурсы и звание Лучшего строителя!",
+                image: "bg5"
+            },
+            {
+                id: 6,
+                title: "Добавлены новые плагины экономики",
+                date: "20.09.2023",
+                excerpt: "На сервер добавлены плагины для расширенной экономики. Теперь доступны новые профессии и способы заработка.",
+                image: "bg6"
+            }
+        ];
+        
+        // Элементы DOM
+        const loginScreen = document.getElementById('login-screen');
+        const mainScreen = document.getElementById('main-screen');
+        const loginForm = document.getElementById('loginForm');
+        const logoutBtn = document.getElementById('logout-btn');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.section');
+        const currentUsername = document.getElementById('current-username');
+        const applicationForm = document.getElementById('applicationForm');
+        const newsContainer = document.getElementById('news-container');
+        const homeNewsContainer = document.getElementById('home-news');
+        
+        // Функция для отображения уведомлений
+        function showNotification(message, type = 'success') {
+            // Удаляем существующие уведомления
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notification => notification.remove());
+            
+            // Создаем новое уведомление
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Автоматическое удаление через 5 секунд
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+        
+        // Функция для входа в систему
+        function login(username) {
+            // Сохраняем имя пользователя
+            localStorage.setItem('mc-username', username);
+            currentUsername.textContent = username;
+            
+            // Анимация перехода
+            loginScreen.style.opacity = '0';
+            
+            setTimeout(() => {
+                loginScreen.style.display = 'none';
+                mainScreen.style.display = 'block';
                 
                 setTimeout(() => {
-                    btn.innerHTML = originalHTML;
-                    btn.style.background = 'linear-gradient(135deg, #00FF00, #00AA00)';
-                }, 2000);
+                    mainScreen.style.opacity = '1';
+                }, 50);
+                
+                // Загружаем новости
+                loadNews();
+            }, 500);
+            
+            showNotification(`Добро пожаловать, ${username}!`, 'success');
+        }
+        
+        // Функция для выхода из системы
+        function logout() {
+            mainScreen.style.opacity = '0';
+            
+            setTimeout(() => {
+                mainScreen.style.display = 'none';
+                loginScreen.style.display = 'flex';
+                
+                setTimeout(() => {
+                    loginScreen.style.opacity = '1';
+                }, 50);
+            }, 500);
+            
+            // Очищаем форму входа
+            loginForm.reset();
+            
+            showNotification('Вы успешно вышли из системы.', 'success');
+        }
+        
+        // Функция для переключения между разделами
+        function switchSection(sectionId) {
+            // Обновляем активную ссылку в навигации
+            navLinks.forEach(link => {
+                if (link.getAttribute('data-section') === sectionId) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            
+            // Показываем выбранный раздел
+            sections.forEach(section => {
+                if (section.id === sectionId) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
             });
         }
         
-        // Обновление года в футере
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-        
-        // Симуляция онлайн (можно заменить на реальный API)
-        function updateOnline() {
-            const onlineElement = document.getElementById('online-count');
-            const parts = onlineElement.textContent.split('/');
-            const current = parseInt(parts[0]);
-            const max = 100;
+        // Функция для загрузки новостей
+        function loadNews() {
+            // Очищаем контейнеры
+            newsContainer.innerHTML = '';
+            homeNewsContainer.innerHTML = '';
             
-            // Случайное изменение ±2 игрока
-            const change = Math.floor(Math.random() * 5) - 2;
-            const newOnline = Math.max(30, Math.min(max - 10, current + change));
+            // Для главной страницы показываем только 3 новости
+            const homeNews = newsData.slice(0, 3);
             
-            onlineElement.textContent = `${newOnline}/${max}`;
+            // Генерируем HTML для новостей на главной
+            homeNews.forEach(news => {
+                const newsCard = createNewsCard(news);
+                homeNewsContainer.appendChild(newsCard);
+            });
             
-            // Анимация
-            onlineElement.style.transform = 'scale(1.1)';
-            onlineElement.style.color = newOnline > current ? '#00FF00' : '#FF5555';
-            setTimeout(() => {
-                onlineElement.style.transform = 'scale(1)';
-                onlineElement.style.color = '#00FF00';
-            }, 300);
+            // Генерируем HTML для всех новостей на странице новостей
+            newsData.forEach(news => {
+                const newsCard = createNewsCard(news);
+                newsContainer.appendChild(newsCard);
+            });
         }
         
-        // Обновляем онлайн каждые 30 секунд
-        setInterval(updateOnline, 30000);
+        // Функция для создания карточки новости
+        function createNewsCard(news) {
+            const newsCard = document.createElement('div');
+            newsCard.className = 'news-card';
+            
+            // Генерируем случайный цвет для фона
+            const colors = ['#3a873a', '#4a90e2', '#e6b422', '#8e44ad', '#e74c3c', '#3498db'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            newsCard.innerHTML = `
+                <div class="news-image" style="background-color: ${randomColor};">
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 3rem; color: rgba(255,255,255,0.2);">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                </div>
+                <div class="news-content">
+                    <h3 class="news-title">${news.title}</h3>
+                    <div class="news-date">
+                        <i class="far fa-calendar-alt"></i> ${news.date}
+                    </div>
+                    <p class="news-excerpt">${news.excerpt}</p>
+                </div>
+            `;
+            
+            return newsCard;
+        }
         
-        // Анимация для IP блока
-        const ipElement = document.getElementById('ip-address');
-        setInterval(() => {
-            ipElement.style.boxShadow = ipElement.style.boxShadow === 'none' ? 
-                '0 0 50px rgba(0, 255, 0, 0.4)' : 'none';
-        }, 1000);
+        // Обработчик события отправки формы входа
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if (!username || !password) {
+                showNotification('Пожалуйста, заполните все поля.', 'error');
+                return;
+            }
+            
+            // В демо-режиме принимаем любые данные
+            if (username && password) {
+                login(username);
+            } else {
+                showNotification('Неверное имя пользователя или пароль.', 'error');
+            }
+        });
+        
+        // Обработчик события выхода
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            logout();
+        });
+        
+        // Обработчики событий для навигации
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const sectionId = this.getAttribute('data-section');
+                switchSection(sectionId);
+            });
+        });
+        
+        // Обработчик события отправки формы анкеты
+        applicationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Получаем данные из формы
+            const mcUsername = document.getElementById('mc-username').value.trim();
+            const age = document.getElementById('age').value.trim();
+            const discord = document.getElementById('discord').value.trim();
+            const playtime = document.getElementById('playtime').value;
+            const experience = document.getElementById('experience').value.trim();
+            const reason = document.getElementById('reason').value.trim();
+            const rules = document.getElementById('rules').checked;
+            
+            // Валидация
+            if (!mcUsername || !age || !discord || !experience || !reason || !rules) {
+                showNotification('Пожалуйста, заполните все обязательные поля.', 'error');
+                return;
+            }
+            
+            if (parseInt(age) < 12) {
+                showNotification('Возраст должен быть не менее 12 лет.', 'error');
+                return;
+            }
+            
+            // Имитация отправки на сервер
+            setTimeout(() => {
+                // Очищаем форму
+                applicationForm.reset();
+                
+                // Показываем уведомление об успехе
+                showNotification('Ваша анкета успешно отправлена! Ответ придёт в течение 24 часов.', 'success');
+                
+                // Переключаемся на главную страницу
+                switchSection('home');
+            }, 1000);
+        });
+        
+        // Проверяем, авторизован ли пользователь при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedUsername = localStorage.getItem('mc-username');
+            
+            if (savedUsername) {
+                // Пользователь уже авторизован
+                login(savedUsername);
+            } else {
+                // Показываем экран входа
+                loginScreen.style.display = 'flex';
+                mainScreen.style.display = 'none';
+                
+                setTimeout(() => {
+                    loginScreen.style.opacity = '1';
+                }, 50);
+            }
+        });
     </script>
 </body>
 </html>
