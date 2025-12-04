@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daileemine | Minecraft Сервер</title>
+    <meta name="description" content="Офіційний сайт Minecraft сервера Daileemine. Приєднуйся до нашої спільноти!">
+    <style>
+        :root {
+            --mc-green: #00FF00;
+            --mc-dark-green: #00AA00;
+            --mc-dark: #1a1a2e;
+            --mc-blue: #00ADB5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--mc-dark);
+            color: white;
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(0, 173, 181, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 255, 0, 0.05) 0%, transparent 50%);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+            padding: 3rem 0;
+            text-align: center;
+            border-bottom: 5px solid var(--mc-green);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::after {
+            content: '⚔️';
+            position: absolute;
+            font-size: 200px;
+            opacity: 0.05;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .logo {
+            font-size: 4rem;
+            background: linear-gradient(45deg, var(--mc-green), var(--mc-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .server-ip-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 4rem auto;
+            max-width: 900px;
+            border: 2px solid rgba(0, 255, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .server-ip-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--mc-green), var(--mc-blue));
+        }
+        
+        .ip-display {
+            font-family: 'Courier New', monospace;
+            font-size: 3rem;
+            color: var(--mc-green);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1.5rem 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            display: inline-block;
+            border: 2px solid var(--mc-blue);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.2); }
+            50% { box-shadow: 0 0 50px rgba(0, 255, 0, 0.4); }
+            100% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.2); }
+        }
+        
+        .copy-btn {
+            background: linear-gradient(135deg, var(--mc-green), var(--mc-dark-green));
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        
+        .copy-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 255, 0, 0.3);
+        }
+        
+        .copy-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 5px solid var(--mc-blue);
+            transition: transform 0.3s;
+        }
+        
+        .feature:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .feature h3 {
+            color: var(--mc-blue);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 1.5rem;
+            min-width: 150px;
+        }
+        
+        .stat-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--mc-green);
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 3rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(0, 173, 181, 0.3);
+        }
+        
+        .discord-btn {
+            background: #5865F2;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .discord-btn:hover {
+            background: #4752C4;
+            transform: translateY(-3px);
+        }
+        
+        @media (max-width: 768px) {
+            .logo { font-size: 2.5rem; }
+            .ip-display { font-size: 2rem; padding: 1rem; }
+            .server-ip-card { padding: 2rem 1.5rem; margin: 2rem 1rem; }
+            .stat-value { font-size: 2rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">⚔️ Daileemine</h1>
+            <p style="font-size: 1.2rem; color: #8da1b9; max-width: 600px; margin: 0 auto;">
+                Український Minecraft сервер з дружньою спільнотою та унікальними модами
+            </p>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">24/7</div>
+                    <p>Онлайн сервер</p>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="online-count">42/100</div>
+                    <p>Гравців онлайн</p>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">1.16-1.20</div>
+                    <p>Версія Minecraft</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="server-ip-card">
+            <h2 style="text-align: center; margin-bottom: 1.5rem; color: var(--mc-blue); font-size: 2rem;">
+                <i class="fas fa-server"></i> Підключитися до сервера
+            </h2>
+            
+            <div style="text-align: center;">
+                <p style="margin-bottom: 1rem; color: #8da1b9; font-size: 1.1rem;">
+                    Скопіюйте IP-адресу та вставте в клієнт Minecraft:
+                </p>
+                
+                <div class="ip-display" id="ip-address">
+                    daileemine.pp.ua
+                </div>
+                
+                <button class="copy-btn" onclick="copyIP()">
+                    <i class="far fa-copy"></i> Копіювати IP
+                </button>
+            </div>
+            
+            <div style="margin-top: 3rem; background: rgba(0, 173, 181, 0.1); padding: 1.5rem; border-radius: 10px;">
+                <h3 style="color: var(--mc-blue); margin-bottom: 1rem;">
+                    <i class="fas fa-gamepad"></i> Як приєднатися?
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                        <div style="color: var(--mc-green); font-weight: bold;">1</div>
+                        <p>Запустіть Minecraft</p>
+                    </div>
+                    <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                        <div style="color: var(--mc-green); font-weight: bold;">2</div>
+                        <p>Мережева гра → Додати сервер</p>
+                    </div>
+                    <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                        <div style="color: var(--mc-green); font-weight: bold;">3</div>
+                        <p>Вставте IP: <strong>daileemine.pp.ua</strong></p>
+                    </div>
+                    <div style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                        <div style="color: var(--mc-green); font-weight: bold;">4</div>
+                        <p>Збережіть та грайте!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="text-align: center; color: var(--mc-blue); margin: 4rem 0 2rem; font-size: 2.5rem;">
+            <i class="fas fa-star"></i> Наші особливості
+        </h2>
+        
+        <div class="features-grid">
+            <div class="feature">
+                <h3><i class="fas fa-cogs"></i> Моди та плагіни</h3>
+                <p>Унікальні моди для покращення геймплею, економіка, квести, система захисту територій</p>
+            </div>
+            
+            <div class="feature">
+                <h3><i class="fas fa-trophy"></i> Міні-ігри</h3>
+                <p>BedWars, SkyWars, Capture the Flag та інші захоплюючі міні-ігри</p>
+            </div>
+            
+            <div class="feature">
+                <h3><i class="fas fa-shield-alt"></i> Анти-чит</h3>
+                <p>Потужна система захисту від читів,公平 гра для всіх</p>
+            </div>
+            
+            <div class="feature">
+                <h3><i class="fas fa-users"></i> Спільнота</h3>
+                <p>Активна та дружня спільнота, регулярні івенти, конкурси з призами</p>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 4rem 0;">
+            <a href="#" class="discord-btn">
+                <i class="fab fa-discord"></i> Наш Discord сервер
+            </a>
+            <a href="#" style="color: var(--mc-blue); text-decoration: none; margin: 1rem; display: inline-block;">
+                <i class="fab fa-telegram"></i> Telegram канал
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div style="margin-bottom: 2rem;">
+                <div class="logo" style="font-size: 2rem;">⚔️ Daileemine</div>
+                <p style="color: #8da1b9; margin-top: 1rem;">Український Minecraft сервер</p>
+            </div>
+            
+            <div style="color: #666; font-size: 0.9rem; margin-top: 2rem;">
+                <p>© <span id="current-year">2024</span> Daileemine Minecraft Server. Усі права захищені.</p>
+                <p style="margin-top: 0.5rem;">
+                    <i class="fas fa-globe"></i> daileemine.pp.ua | 
+                    <i class="fas fa-envelope"></i> admin@daileemine.pp.ua
+                </p>
+                <p style="margin-top: 0.5rem; color: #8da1b9; font-size: 0.8rem;">
+                    Хостинг: GitHub Pages | SSL: Let's Encrypt
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Копирование IP
+        function copyIP() {
+            const ip = document.getElementById('ip-address').textContent;
+            navigator.clipboard.writeText(ip).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Скопійовано!';
+                btn.style.background = 'linear-gradient(135deg, #00FF00, #00AA00)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.style.background = 'linear-gradient(135deg, #00FF00, #00AA00)';
+                }, 2000);
+            });
+        }
+        
+        // Обновление года в футере
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        // Симуляция онлайн (можно заменить на реальный API)
+        function updateOnline() {
+            const onlineElement = document.getElementById('online-count');
+            const parts = onlineElement.textContent.split('/');
+            const current = parseInt(parts[0]);
+            const max = 100;
+            
+            // Случайное изменение ±2 игрока
+            const change = Math.floor(Math.random() * 5) - 2;
+            const newOnline = Math.max(30, Math.min(max - 10, current + change));
+            
+            onlineElement.textContent = `${newOnline}/${max}`;
+            
+            // Анимация
+            onlineElement.style.transform = 'scale(1.1)';
+            onlineElement.style.color = newOnline > current ? '#00FF00' : '#FF5555';
+            setTimeout(() => {
+                onlineElement.style.transform = 'scale(1)';
+                onlineElement.style.color = '#00FF00';
+            }, 300);
+        }
+        
+        // Обновляем онлайн каждые 30 секунд
+        setInterval(updateOnline, 30000);
+        
+        // Анимация для IP блока
+        const ipElement = document.getElementById('ip-address');
+        setInterval(() => {
+            ipElement.style.boxShadow = ipElement.style.boxShadow === 'none' ? 
+                '0 0 50px rgba(0, 255, 0, 0.4)' : 'none';
+        }, 1000);
+    </script>
+</body>
+</html>
